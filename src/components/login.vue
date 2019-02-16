@@ -49,13 +49,13 @@ export default {
       const res = await this.$http.post(`login`, this.formdata);
       const {
         data: {
-          data:{token},
+          data,
           meta: { msg, status }
         }
       } = res;
       if (status === 200) {
         console.log("success");
-        localStorage.setItem('token',token)
+        localStorage.setItem('token',data.token)
         this.$router.push({
           name: "home"
         });
