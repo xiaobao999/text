@@ -29,7 +29,7 @@
               <span>用户管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1">
+              <el-menu-item index="users">
                 <i class="el-icon-menu"></i>用户列表
               </el-menu-item>
             </el-menu-item-group>
@@ -93,7 +93,9 @@
           </el-submenu>
         </el-menu>
       </el-aside>
-      <el-main class="main">Main</el-main>
+      <el-main class="main">
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -113,7 +115,7 @@ export default {
       this.$router.push({
         name: "login"
       });
-      this.$message.warning('退出成功')
+      this.$message.warning("退出成功");
     }
   }
 };
@@ -134,7 +136,7 @@ export default {
 }
 .aside {
   /* height: 100%; */
-  background-color: yellow;
+  /* background-color: yellow; */
 }
 
 .main {
