@@ -135,12 +135,12 @@ export default {
   text-decoration: none;
 }
 .aside {
-  /* height: 100%; */
-  /* background-color: yellow; */
+  height: 100%;
+  background-color: #b3c0d1;
 }
 
 .main {
-  /* height: 100%; */
-  background-color: green;
+  height: 100%;
+  background-color: #b3c0d1;
 }
 </style>
