@@ -41,7 +41,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="name" label="操作" width="140">
-          <template>
+          <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
             <el-button
               type="danger"
@@ -49,7 +49,7 @@
               circle
               size="mini"
               plain
-              @click="deluser()"
+              @click="deluser(scope.row)"
             ></el-button>
             <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
           </template>
@@ -113,28 +113,32 @@ export default {
     this.getTabData();
   },
   methods: {
-    deluser() {
+    deluser(users) {
+      // console.log(users);
       this.$confirm("确定删除此用户?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+        .then(async () => {
+          const res = await this.$http.delete(`users/${users.id}`);
+          // console.log(res);
+          const {
+            meta: { msg, status }
+          } = res.data;
+          if (status === 200) {
+            this.$message.success("删除成功!");
+            this.pagenum = 1;
+            this.getTabData();
+          }
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          this.$message.info("取消成功");
         });
     },
     async adduse() {
       const res = await this.$http.post(`users`, this.formdata);
-      console.log(res);
+      // console.log(res);
       const {
         meta: { msg, status }
       } = res.data;
@@ -180,7 +184,7 @@ export default {
       if (status === 200) {
         this.total = data.total;
         this.list = data.users;
-        console.log(this.list);
+        // console.log(this.list);
       }
     }
   }
