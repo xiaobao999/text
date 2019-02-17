@@ -43,7 +43,14 @@
         <el-table-column prop="name" label="操作" width="140">
           <template>
             <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              size="mini"
+              plain
+              @click="deluser()"
+            ></el-button>
             <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
           </template>
         </el-table-column>
@@ -106,6 +113,25 @@ export default {
     this.getTabData();
   },
   methods: {
+    deluser() {
+      this.$confirm("确定删除此用户?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
     async adduse() {
       const res = await this.$http.post(`users`, this.formdata);
       console.log(res);
