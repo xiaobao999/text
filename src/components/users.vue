@@ -37,7 +37,12 @@
         </el-table-column>
         <el-table-column label="用户状态" width="140">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+            <el-switch
+              @change="changeState(scope.row)"
+              v-model="scope.row.mg_state"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            ></el-switch>
           </template>
         </el-table-column>
         <el-table-column prop="name" label="操作" width="140">
@@ -58,7 +63,14 @@
               plain
               @click="deluser(scope.row)"
             ></el-button>
-            <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
+            <el-button
+              @click="showDiaSetRole(scope.row)"
+              type="success"
+              icon="el-icon-check"
+              circle
+              size="mini"
+              plain
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -99,7 +111,7 @@
     <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
       <el-form label-position="left" label-width="80px" :model="formdata">
         <el-form-item label="用户名">
-          <el-input v-model="formdata.username"></el-input>
+          <el-input disabled v-model="formdata.username"></el-input>
         </el-form-item>
         <el-form-item label="邮箱">
           <el-input v-model="formdata.email"></el-input>
@@ -112,6 +124,29 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleEdit = false">取 消</el-button>
         <el-button type="primary" @click="edituse()">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 编辑用户状态 -->
+    <el-dialog title="分配角色" :visible.sync="dialogFormVisibleRole">
+      <el-form :model="formdata" label-width="80px" label-position="left">
+        <el-form-item label="用户名">
+          <span>{{formdata.username}}</span>
+        </el-form-item>
+        <el-form-item label="角色">
+          <el-select v-model="selectVal" placeholder="请选择角色">
+            <el-option label="请选择" :value="-1" disabled></el-option>
+            <el-option
+              v-for="(item,i) in roles"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleRole = false">取 消</el-button>
+        <el-button type="primary" @click="Roleuse()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -128,18 +163,46 @@ export default {
       total: -1,
       dialogFormVisibleAdd: false,
       dialogFormVisibleEdit: false,
+      dialogFormVisibleRole: false,
       formdata: {
         username: "",
         password: "",
         email: "",
         mobile: ""
-      }
+      },
+      selectVal: "",
+      roles: [],
+      currUserId: -1
     };
   },
   created() {
     this.getTabData();
   },
   methods: {
+    async Roleuse() {
+      const res = await this.$http.put(`users/${this.currUserId}/role`, {
+        rid: this.selectVal
+      });
+      console.log(res);
+
+      const { msg, status } = res.data.meta;
+      if (status === 200) {
+        this.dialogFormVisibleRole = false;
+      }
+    },
+    async showDiaSetRole(user) {
+      this.formdata.username = user.username;
+      this.currUserId = user.id;
+      this.dialogFormVisibleRole = true;
+      const res = await this.$http.get(`roles`);
+      this.roles = res.data.data;
+      const res2 = await this.$http.get(`users/${user.id}`);
+      this.selectVal = res2.data.data.rid;
+    },
+    async changeState(user) {
+      // console.log(user);
+      this.$http.put(`users/${user.id}/state/${user.mg_state}`);
+    },
     async edituse() {
       const res = await this.$http.put(
         `users/${this.formdata.id}`,
