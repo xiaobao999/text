@@ -16,5 +16,6 @@ HttpServer.install = function (Vue) {
       return Promise.reject(error)
     }
   )
+  Vue.prototype.$http = axios
 }
 export default HttpServer
