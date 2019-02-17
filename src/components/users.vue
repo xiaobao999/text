@@ -42,7 +42,14 @@
         </el-table-column>
         <el-table-column prop="name" label="操作" width="140">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
+            <el-button
+              @click="showEditUser(scope.row)"
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              size="mini"
+              plain
+            ></el-button>
             <el-button
               type="danger"
               icon="el-icon-delete"
@@ -66,8 +73,8 @@
         :total="total"
       ></el-pagination>
     </el-card>
+    <!-- 添加用户 -->
     <el-dialog title="添加用户" :visible.sync="dialogFormVisibleAdd">
-      <!-- 表单 -->
       <el-form label-position="left" label-width="80px" :model="formdata">
         <el-form-item label="用户名">
           <el-input v-model="formdata.username"></el-input>
@@ -88,6 +95,25 @@
         <el-button type="primary" @click="adduse()">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 编辑用户 -->
+    <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
+      <el-form label-position="left" label-width="80px" :model="formdata">
+        <el-form-item label="用户名">
+          <el-input v-model="formdata.username"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="formdata.email"></el-input>
+        </el-form-item>
+        <el-form-item label="电话">
+          <el-input v-model="formdata.mobile"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleEdit = false">取 消</el-button>
+        <el-button type="primary" @click="edituse()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
   <!-- 添加弹出对话框 -->
 </template>
@@ -101,6 +127,7 @@ export default {
       list: [],
       total: -1,
       dialogFormVisibleAdd: false,
+      dialogFormVisibleEdit: false,
       formdata: {
         username: "",
         password: "",
@@ -113,6 +140,24 @@ export default {
     this.getTabData();
   },
   methods: {
+    async edituse() {
+      const res = await this.$http.put(
+        `users/${this.formdata.id}`,
+        this.formdata
+      );
+      const {
+        meta: { msg, status }
+      } = res.data;
+      if (status === 200) {
+        this.dialogFormVisibleEdit = false;
+        this.getTabData();
+      }
+    },
+    async showEditUser(user) {
+      this.formdata = user;
+      this.dialogFormVisibleEdit = true;
+      const res = await this.$http.get(`users/${user.id}`);
+    },
     deluser(users) {
       // console.log(users);
       this.$confirm("确定删除此用户?", "提示", {
