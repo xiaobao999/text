@@ -278,8 +278,6 @@ export default {
       this.getTabData();
     },
     async getTabData() {
-      const AUTH_TOKEN = await localStorage.getItem("token");
-      this.$http.defaults.headers.common["Authorization"] = AUTH_TOKEN;
       const res = await this.$http.get(
         `users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
           this.pagesize
