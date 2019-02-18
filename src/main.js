@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import moment from 'moment'
+import CusBread from '@/components/cusBread.vue'
 import ElementUI from 'element-ui'
 import HttpSever from '@/http.js'
 import '@/assets/css/baes.css'
@@ -15,6 +16,7 @@ Vue.use(ElementUI)
 Vue.filter('fmtdata', (v) => {
   return moment(v).format('YYYY-MM-DD')
 })
+Vue.component(CusBread.name, CusBread)
 
 /* eslint-disable no-new */
 new Vue({

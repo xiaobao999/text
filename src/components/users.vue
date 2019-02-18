@@ -1,14 +1,8 @@
 <template>
-  <div>
+  <div class="bigbox">
     <el-card class="box">
       <!-- 面包屑 -->
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>
-          <a href="/">用户管理</a>
-        </el-breadcrumb-item>
-        <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-      </el-breadcrumb>
+      <cus-bread level1="用户管理" level2="用户列表"></cus-bread>
       <!-- 搜索框 -->
       <el-row class="el-box">
         <el-col :span="10">
@@ -302,5 +296,11 @@ export default {
 }
 .suinput {
   width: 350px;
+}
+.bigbox {
+  height: 100%;
+}
+.box {
+  height: 100%;
 }
 </style>
