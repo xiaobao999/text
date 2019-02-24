@@ -17,19 +17,19 @@
       <!-- 侧栏 -->
       <el-aside class="aside" width="200px">
         <el-menu
-          default-active="2"
+          :default-active="$route.name"
           class="el-menu-vertical-demo"
           :unique-opened="true"
           :router="true"
         >
           <!-- 1 -->
-          <el-submenu :index="item1.order+''" v-for="(item1,i) in menus" :key="item1.id">
+          <el-submenu :index="item1.order+''" v-for="(item1) in menus" :key="item1.id">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>{{item1.authName}}</span>
             </template>
 
-            <el-menu-item-group v-for="(item2,i) in item1.children" :key="item2.id">
+            <el-menu-item-group v-for="(item2) in item1.children" :key="item2.id">
               <el-menu-item :index="item2.path+''">
                 <i class="el-icon-menu"></i>
                 {{item2.authName}}
@@ -75,7 +75,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .container {
   height: 100%;
   background-color: #b3c0d1;

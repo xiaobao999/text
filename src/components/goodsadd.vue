@@ -12,7 +12,7 @@
     </el-steps>
     <!-- tab切换 -->
     <el-form label-position="top" label-width="80px" :model="form" class="from">
-      <el-tabs tab-position="left" v-model="active" @tab-click="changeTab()">
+      <el-tabs tab-position="left" v-model="active" @tab-click="changeTab()" hight="350px">
         <el-tab-pane label="基本信息" name="1">
           <el-form-item label="商品名称">
             <el-input v-model="form.goods_name"></el-input>
@@ -38,14 +38,14 @@
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="商品参数" name="2">
-          <el-form-item :label="item1.attr_name" v-for="(item1,i) in arrDy" :key="item1.attr_id">
+          <el-form-item :label="item1.attr_name" v-for="(item1) in arrDy" :key="item1.attr_id">
             <el-checkbox-group v-model="item1.attr_vals">
               <el-checkbox border :label="item2" v-for="(item2,i) in item1.attr_vals" :key="i"></el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="商品属性" name="3">
-          <el-form-item :label="item.attr_name" v-for="(item,i) in arrStatic" :key="item.attr_id">
+          <el-form-item :label="item.attr_name" v-for="(item) in arrStatic" :key="item.attr_id">
             <el-input v-model="item.attr_vals"></el-input>
           </el-form-item>
         </el-tab-pane>
@@ -209,9 +209,10 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .box {
   height: 100%;
+  overflow: auto;
 }
 .alert {
   margin-top: 20px;
